@@ -15,8 +15,6 @@ int count_increases(List<num> depths) {
 }
 
 void main() async {
-  print(Platform.script.toFilePath());
-  print(Directory.current);
   File input = new File('day1.txt');
   List<String> lines = await input.readAsLines();
   List<int> depths = lines.map((e) => int.parse(e)).toList();
