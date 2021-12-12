@@ -1,11 +1,5 @@
 import 'dart:io';
 
-void print_octopuses(List<List<int>> octopuses) {
-  for (List row in octopuses) {
-    print(row.map((e) => e.toString()).toList().join(''));
-  }
-}
-
 int flash(List<List<int>> octopuses, i, j) {
   octopuses[i][j] = 0;
   int flashes = 1;
@@ -18,7 +12,7 @@ int flash(List<List<int>> octopuses, i, j) {
   return flashes;
 }
 
-bool all_zeros(List<List<int>> octopuses) {
+bool is_all_zeros(List<List<int>> octopuses) {
   return octopuses.reduce((e, i) => e + i).reduce((e, i) => e + i) == 0;
 }
 
@@ -43,6 +37,11 @@ int count_flashes(List<List<int>> octopuses) {
 }
 
 void main() {
+  //The trick I did here I stole from someone for like day 6 or day 7 or something.
+  //Up front, I wrap the grid in zeros so that I don't get any null errors and I don't have
+  //to do bounds checking when looking at neighbors. I can just reference them
+  //at will, but ignore them in any calculations. It makes the count_flashes and flash
+  //functions much cleaner.
   List<List<int>> octopuses = File('day11.txt')
       .readAsLinesSync()
       .map((line) => line.split('').map((o) => int.parse(o)).toList()
@@ -54,13 +53,13 @@ void main() {
 
   int total_flashes = 0;
   int all_flashes_at = 0;
-  while (!all_zeros(octopuses)) {
+  while (!is_all_zeros(octopuses)) {
     if (all_flashes_at < 100)
       total_flashes += count_flashes(octopuses);
     else
       count_flashes(octopuses);
     all_flashes_at++;
   }
-  print(total_flashes);
-  print(all_flashes_at);
+  print("Flashes after 100 cycles: $total_flashes");
+  print("Earliest cycle when all octopoda simultaneously flash: $all_flashes_at");
 }
